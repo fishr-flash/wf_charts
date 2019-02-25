@@ -1,14 +1,14 @@
 'use strict'
 
 import jsnhist from './data/rawhist_24022019_1402-24022019_1955';
-import hloader from './data/history_loader';
+import histServant from './data/history_loader';
 
 
 //const weaponKey = 'ПП-2000 Карбон';
 //const weaponKey = 'AT308 Синдикат';
 const weaponKey = 'H&K MP5A5 Custom Синдикат';
 const warrs = jsnhist();
-
+var servant;
 //console.log( warrs );
 /**
  * head: {…}
@@ -27,6 +27,7 @@ const warrs = jsnhist();
  ['2014',  1170,      460],
  ['2015',  660,       1120],
  ['2016',  1030,      540]
+ ]);
  ]);
  */
 const ent = warrs.filter(
@@ -90,11 +91,11 @@ google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(init);
 
 function init() {
-    hloader();
-    drawChart( 42 )
+    histServant( updateChart );
+
 }
 //console.log( tl )
-function drawChart( minv = 42 ) {
+function drawChart( minv = 42, timeline ) {
     /*var data = google.visualization.arrayToDataTable([
         ['Year', 'Sales', 'Expenses'],
         ['2013', 1000, 400],
@@ -102,7 +103,7 @@ function drawChart( minv = 42 ) {
         ['2015', 660, 1120],
         ['2016', 1030, 540]
     ]);*/
-    let data = google.visualization.arrayToDataTable( tl );
+    let data = google.visualization.arrayToDataTable( timeline );
 
     let options = {
         title: 'WF Marketplace',
@@ -114,25 +115,8 @@ function drawChart( minv = 42 ) {
     chart.draw(data, options);
 
 
-    var selectKey = document.getElementById( "wepon_keys" );
-    if( !selectKey.options.length )
-    {
-        let sel = document.createElement( "option");
-        weapons.map( ( current, index, arr ) => {
-
-            let sel = document.createElement( "option");
-            sel.value = current;
-            sel.innerHTML = current;
-            selectKey.appendChild( sel )
 
 
-        })
-        sel.value = "weapon";
-        sel.innerHTML = "weapon";
-        selectKey.appendChild( sel )
-        //selectKey.wr
-        selectKey.onchange = changeKey;
-    }
 
 
 }
@@ -141,6 +125,10 @@ var changeKey = ( e ) =>{
     console.log( "on select key: ",weapons[ e.target.selectedIndex ]);
 
     let selected = weapons[ e.target.selectedIndex ];
+
+
+    //servant.getTmLine( selected )
+    console.log(  "servant.getTmLine( selected ) : ", servant.getTmLine( selected ) );
 
     const ent = warrs.filter(
         ( current, index, arr ) => {
@@ -169,7 +157,35 @@ var changeKey = ( e ) =>{
          //, "count"
     ]);
 
-    drawChart( ent.head.minc + 42 );
 
+
+    drawChart( ent.head.minc + 42, servant.getTmLine( selected )  );
+
+}
+
+function  updateChart ( srv ) {
+
+    servant = srv;
+    console.log( "servant.weaponNames: ",  servant.weaponNames )
+
+
+    var selectKey = document.getElementById( "wepon_keys" );
+    if( !selectKey.options.length ) {
+        let sel = document.createElement("option");
+        servant.weaponNames.map((current, index, arr) => {
+
+            let sel = document.createElement("option");
+            sel.value = current;
+            sel.innerHTML = current;
+            selectKey.appendChild(sel)
+
+
+        })
+        sel.value = "weapon";
+        sel.innerHTML = "weapon";
+        selectKey.appendChild(sel)
+        //selectKey.wr
+        selectKey.onchange = changeKey;
+    }
 }
 //console.log(  tl )
