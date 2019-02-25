@@ -1,6 +1,8 @@
 'use strict'
 
 import jsnhist from './data/rawhist_24022019_1402-24022019_1955';
+import hloader from './data/history_loader';
+
 
 //const weaponKey = 'ПП-2000 Карбон';
 //const weaponKey = 'AT308 Синдикат';
@@ -85,8 +87,12 @@ tl.unshift( [ "time"
 
 
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+google.charts.setOnLoadCallback(init);
 
+function init() {
+    hloader();
+    drawChart( 42 )
+}
 //console.log( tl )
 function drawChart( minv = 42 ) {
     /*var data = google.visualization.arrayToDataTable([
