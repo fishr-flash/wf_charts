@@ -19,12 +19,12 @@ export default  function ( callback ){
 
         reader.onload = ( e ) => {
 
-            console.log(e.target.result)
+
 
             parseHData( JSON.parse( e.target.result ) )
         }
         reader.readAsText( fileList[ 0 ] );
-        console.log( "reader.result:", reader.result)
+
 
 
     }
@@ -39,7 +39,7 @@ export default  function ( callback ){
                     return current;
             }
         )[ 0 ]
-        console.log( "ent: ",ent);
+
 
         let tl = ent.tl.map(
             ( current, index, arr ) => {
@@ -66,7 +66,8 @@ export default  function ( callback ){
     const parseHData = ( data ) =>
     {
         servant.getTmLine = getTmLine;
-        _allweapons = data;
+        servant.allweapons  = _allweapons = data;;
+
         servant.weaponNames = data.map( ( current, index, arr ) => {
 
             /**
@@ -80,7 +81,7 @@ export default  function ( callback ){
                  tl: (248) [{…}, ... ]
                  __proto__: Object
              */
-            //console.log( 'current', current.head.key );
+
            return current.head.key;
 
 

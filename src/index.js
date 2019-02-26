@@ -9,7 +9,7 @@ import histServant from './data/history_loader';
 const weaponKey = 'H&K MP5A5 Custom Синдикат';
 const warrs = jsnhist();
 var servant;
-//console.log( warrs );
+
 /**
  * head: {…}
  ​​​ entity_id: 3924
@@ -39,15 +39,15 @@ const ent = warrs.filter(
 
 const weapons = warrs.map( ( current, index, arr ) => {
 
-    console.log( 'current', current.head.key );
+
         return current.head.key;
 })
 
-console.log( "weapons: ",  weapons );
 
 
 
- //console.log(  ent )
+
+
 /**
  * -{
         "head" : -{
@@ -94,7 +94,7 @@ function init() {
     histServant( updateChart );
 
 }
-//console.log( tl )
+
 function drawChart( minv = 42, timeline ) {
     /*var data = google.visualization.arrayToDataTable([
         ['Year', 'Sales', 'Expenses'],
@@ -122,43 +122,7 @@ function drawChart( minv = 42, timeline ) {
 }
 
 var changeKey = ( e ) =>{
-    console.log( "on select key: ",weapons[ e.target.selectedIndex ]);
-
-    let selected = weapons[ e.target.selectedIndex ];
-
-
-    //servant.getTmLine( selected )
-    console.log(  "servant.getTmLine( selected ) : ", servant.getTmLine( selected ) );
-
-    const ent = warrs.filter(
-        ( current, index, arr ) => {
-            if( current.head.key == selected )
-                return current;
-        }
-    )[ 0 ]
-    console.log( "ent: ",ent);
-
-    tl = ent.tl.map(
-        ( current, index, arr ) => {
-            return [
-                `${current.t.hrs}.${current.t.min}.${current.t.sec}`
-                , current.c
-                //, current.sess
-                , current.lq
-                //,100 + ( current.cnt / 100 )
-            ]
-
-        }
-    )
-    tl.unshift( [ "time"
-        , "ccost"
-        //, "session cost"
-         , "liquidity"
-         //, "count"
-    ]);
-
-
-
+    let selected = servant.weaponNames[ e.target.selectedIndex ];
     drawChart( ent.head.minc + 42, servant.getTmLine( selected )  );
 
 }
@@ -166,11 +130,15 @@ var changeKey = ( e ) =>{
 function  updateChart ( srv ) {
 
     servant = srv;
-    console.log( "servant.weaponNames: ",  servant.weaponNames )
+
 
 
     var selectKey = document.getElementById( "wepon_keys" );
-    if( !selectKey.options.length ) {
+
+    while (selectKey.firstChild) {
+        selectKey.removeChild(selectKey.firstChild);
+    }
+
         let sel = document.createElement("option");
         servant.weaponNames.map((current, index, arr) => {
 
@@ -186,6 +154,5 @@ function  updateChart ( srv ) {
         selectKey.appendChild(sel)
         //selectKey.wr
         selectKey.onchange = changeKey;
-    }
+
 }
-//console.log(  tl )
