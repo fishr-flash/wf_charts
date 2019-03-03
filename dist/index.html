@@ -5,12 +5,70 @@
     <title>WF Marketplace</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="bundle.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
 
 </head>
 <body>
 <div>
     <input type="file" id="histori_file" accept="hist*/*">
+    <input type="text" name="datetimes" />
+    <input type="hidden" name="hiddenSt" />
+    <input type="hidden" name="hiddenEnd" />
+
 </div>
+
+
+<script>
+
+
+    var connFunct = null;
+    function delegateDateTime( timeOn, timeOut, cb = null ){
+
+        if( cb )
+            connFunct = cb;
+
+        if( timeOn )
+            connFunct( timeOn, timeOut );
+        console.log( ", timeOn : ", timeOn)
+        console.log( ", timeOut : ", timeOut)
+    }
+
+   //http://www.daterangepicker.com/#options
+    $(function() {
+        $('input[name="datetimes"]').daterangepicker({
+            timePicker: true,
+            showDropdowns: true,
+            timePicker24Hour: true,
+            timePickerSeconds: true,
+            startDate: moment().startOf('hour'),
+            endDate: moment().startOf('hour').add(32, 'hour'),
+            locale: {
+                format: 'M/DD hh:mm A'
+            }
+        }
+        , function(start, end, label) {
+                console.log('New date range selected: ' + start + ' to ' + end + ' (predefined range: ' + label + ')');
+
+                document.getElementsByName( 'hiddenSt').value = start;
+                document.getElementsByName( 'hiddenEnd').value = end;
+
+                //changePeriod( start, end );
+                delegateDateTime( start, end );
+
+
+
+            }
+        );
+    });
+
+
+
+</script>
 <div id="chart_div" style="width: 100%; height: 700px;"></div>
 <!--<div style="padding-left: 240px">
     <form>
@@ -32,6 +90,8 @@
     <p><select size="1"  name="hero" id="wepon_keys" /></p>
 
 </div>
+
+
 
 </body>
 </html>

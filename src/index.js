@@ -10,6 +10,7 @@ const weaponKey = 'H&K MP5A5 Custom Синдикат';
 const warrs = jsnhist();
 var servant;
 
+
 /**
  * head: {…}
  ​​​ entity_id: 3924
@@ -93,6 +94,15 @@ google.charts.setOnLoadCallback(init);
 function init() {
     histServant( updateChart );
 
+    const datetimes = document.getElementsByName( 'datetimes' );
+
+    console.log( datetimes );
+
+
+    connFunct = changePeriod;
+    document.getElementsByName( 'hiddenSt').onchange = changePeriod;
+    document.getElementsByName( 'hiddenEnd').onchange = changePeriod;
+
 }
 
 function drawChart( minv = 42, timeline ) {
@@ -119,6 +129,11 @@ function drawChart( minv = 42, timeline ) {
 
 
 
+}
+
+var changePeriod  = ( timeOn, timeOut ) => {
+    console.log( "timeOn: ", timeOn );
+    console.log( "timeOut: ", timeOut );
 }
 
 var changeKey = ( e ) =>{
