@@ -9,7 +9,7 @@ import histServant from './data/history_loader';
 const weaponKey = 'H&K MP5A5 Custom Синдикат';
 const warrs = jsnhist();
 var servant;
-
+var selectKey;
 
 /**
  * head: {…}
@@ -131,9 +131,18 @@ function drawChart( minv = 42, timeline ) {
 
 }
 
-var changePeriod  = ( timeOn, timeOut ) => {
-    console.log( "timeOn: ", timeOn );
-    console.log( "timeOut: ", timeOut );
+var changePeriod  = ( timeOn, timeOff ) => {
+
+    /**
+     * timeOn, timeOff - object Date
+     */
+
+
+    const tl = servant.getTmLine( servant.weaponNames[ selectKey.selectedIndex ], timeOn._d, timeOff._d  )
+
+
+    drawChart(  42, tl );
+
 }
 
 var changeKey = ( e ) =>{
@@ -144,11 +153,12 @@ var changeKey = ( e ) =>{
 
 function  updateChart ( srv ) {
 
+    selectKey = document.getElementById( "wepon_keys" );
     servant = srv;
 
 
 
-    var selectKey = document.getElementById( "wepon_keys" );
+
 
     while (selectKey.firstChild) {
         selectKey.removeChild(selectKey.firstChild);
@@ -169,5 +179,10 @@ function  updateChart ( srv ) {
         selectKey.appendChild(sel)
         //selectKey.wr
         selectKey.onchange = changeKey;
+
+        let selected = servant.weaponNames[ selectKey.selectedIndex ];
+
+        drawChart( ent.head.minc + 42, servant.getTmLine( selected  ) );
+
 
 }

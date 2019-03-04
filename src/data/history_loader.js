@@ -5,6 +5,12 @@ export default  function ( callback ){
     const selectorFiles = document.getElementById('histori_file');
 
 
+
+    var _keyName;
+
+    var _dateOn;
+    var _dateOff;
+
     var _weaponNames = [];
     var _allweapons = [];
 
@@ -29,8 +35,18 @@ export default  function ( callback ){
 
     }
 
-     var getTmLine =  name => {
+     var getTmLine =  ( name, dateOn = 0, dateOff = 0 ) => {
         
+
+        if( !name )
+            name = _keyName;
+        else
+            _keyName = name;
+
+
+
+
+
 
 
         const ent = _allweapons.filter(
@@ -41,7 +57,98 @@ export default  function ( callback ){
         )[ 0 ]
 
 
-        let tl = ent.tl.map(
+         if( !dateOn && !_dateOn)
+         {
+
+             //Object { mn: "03", yr: "2019", min: "14", hrs: "15", sec: "10", d: "01" }
+             const fd = ent.tl[ 0 ].t;
+
+             //new Date(year, month[, day[, hour[, minute[, second[, millisecond]]]]]);
+             dateOn =  new Date( Number.parseFloat( fd.yr )
+                                        , Number.parseFloat(fd.mn )
+                                        , Number.parseFloat(fd.d )
+                                        , Number.parseFloat(fd.hrs )
+                                        , Number.parseFloat(fd.min )
+                                        , Number.parseFloat(fd.sec ) );
+
+             _dateOn = dateOn;
+         }
+         else if( dateOn )
+         {
+             /// datapicker почему то возвращает предыдущий месяц
+             dateOn.setMonth( dateOn.getMonth() + 1 );
+             _dateOn = dateOn;
+         }
+         else
+         {
+             dateOn = _dateOn;
+         }
+
+
+
+         if( !dateOff && !_dateOff)
+         {
+             //Object { mn: "03", yr: "2019", min: "14", hrs: "15", sec: "10", d: "01" }
+             const ld = ent.tl[ ent.tl.length - 1 ].t;
+
+             //new Date(year, month[, day[, hour[, minute[, second[, millisecond]]]]]);
+             dateOff =  new Date(
+                 Number.parseFloat( ld.yr )
+                 , Number.parseFloat(ld.mn )
+                 , Number.parseFloat(ld.d )
+                 , Number.parseFloat(ld.hrs )
+                 , Number.parseFloat(ld.min )
+                 , Number.parseFloat(ld.sec )
+             //dateOff =  new Date( 2019, 3, 3, 11, 37, 10 );
+              );
+
+             _dateOff = dateOff;
+         }
+         else if( dateOff )
+         {
+             /// datapicker почему то возвращает предыдущий месяц
+             dateOff.setMonth( dateOff.getMonth() + 1 );
+             _dateOff = dateOff;
+         }
+         else
+         {
+             dateOff = _dateOff;
+         }
+
+
+
+         const ttl = ent.tl.filter( ( current ) => {
+
+             const md = new Date(
+                 Number.parseFloat( current.t.yr )
+                 ,Number.parseFloat( current.t.mn )
+                 ,Number.parseFloat( current.t.d )
+                 ,Number.parseFloat( current.t.hrs )
+                 ,Number.parseFloat( current.t.min )
+                 ,Number.parseFloat( current.t.sec )
+             );
+
+
+
+
+
+             if(
+                 dateOn.valueOf() <= Date.parse( md )
+                && dateOff.valueOf() >= Date.parse( md )
+             )
+             {
+
+
+                 return current;
+             }
+
+         });
+
+
+
+
+
+        let tl = ttl.map(
             ( current, index, arr ) => {
                 return [
                     `${current.t.hrs}.${current.t.min}.${current.t.sec}`
@@ -62,6 +169,8 @@ export default  function ( callback ){
 
         return tl;
     }
+
+    
 
     const parseHData = ( data ) =>
     {

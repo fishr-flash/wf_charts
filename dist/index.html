@@ -34,8 +34,7 @@
 
         if( timeOn )
             connFunct( timeOn, timeOut );
-        console.log( ", timeOn : ", timeOn)
-        console.log( ", timeOut : ", timeOut)
+
     }
 
    //http://www.daterangepicker.com/#options
@@ -52,7 +51,7 @@
             }
         }
         , function(start, end, label) {
-                console.log('New date range selected: ' + start + ' to ' + end + ' (predefined range: ' + label + ')');
+                //console.log('New date range selected: ' + start + ' to ' + end + ' (predefined range: ' + label + ')');
 
                 document.getElementsByName( 'hiddenSt').value = start;
                 document.getElementsByName( 'hiddenEnd').value = end;
