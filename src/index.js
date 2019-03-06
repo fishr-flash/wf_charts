@@ -98,8 +98,21 @@ function init() {
 
     const datetimes = document.getElementsByName( 'datetimes' );
 
-    console.log( datetimes );
+    chartOpts = document.getElementById( 'chart_opts');
+    const lbl = document.createElement( 'label' );
+    const t = document.createTextNode( " cost" );
 
+
+    const chb = document.createElement( 'input' );
+    chb.type = 'checkbox';
+    chb.title = 'cost';
+    chb.alt = 'cost';
+    chb.text = 'cost'
+    chb.defaultValue = 'cost';
+    chb.setAttribute( 'defaultValue', 'cost' );
+    lbl.appendChild( chb )
+    chartOpts.appendChild( lbl )
+    lbl.appendChild( t );
 
     connFunct = changePeriod;
     document.getElementsByName( 'hiddenSt').onchange = changePeriod;
