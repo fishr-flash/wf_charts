@@ -2,3 +2,6 @@
 ./.gitignore
 node_modules/
 .idea/
+./dist/bundle.html
+dist/bundle.html
+.gitignore
