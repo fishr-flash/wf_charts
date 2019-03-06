@@ -10,6 +10,8 @@ const weaponKey = 'H&K MP5A5 Custom Синдикат';
 const warrs = jsnhist();
 var servant;
 var selectKey;
+var titleKey;
+var chartOpts;
 
 /**
  * head: {…}
@@ -105,7 +107,7 @@ function init() {
 
 }
 
-function drawChart( minv = 42, timeline ) {
+function drawChart( minv = 42, timeline, nameTitle ) {
     /*var data = google.visualization.arrayToDataTable([
         ['Year', 'Sales', 'Expenses'],
         ['2013', 1000, 400],
@@ -116,7 +118,7 @@ function drawChart( minv = 42, timeline ) {
     let data = google.visualization.arrayToDataTable( timeline );
 
     let options = {
-        title: 'WF Marketplace',
+        title: nameTitle,
         hAxis: {title: "", titleTextStyle: {color: '#333'}},
         vAxis: {minValue: minv }
     };
@@ -147,7 +149,10 @@ var changePeriod  = ( timeOn, timeOff ) => {
 
 var changeKey = ( e ) =>{
     let selected = servant.weaponNames[ e.target.selectedIndex ];
-    drawChart( ent.head.minc + 42, servant.getTmLine( selected )  );
+    drawChart( ent.head.minc + 42, servant.getTmLine( selected ), selected  );
+    const t = document.createTextNode( selected );
+    titleKey.removeChild( titleKey.firstChild );
+    titleKey.appendChild( t );
 
 }
 
@@ -155,6 +160,7 @@ function  updateChart ( srv ) {
 
     selectKey = document.getElementById( "wepon_keys" );
     servant = srv;
+    titleKey = document.getElementById( "selected_title" );
 
 
 
@@ -182,7 +188,10 @@ function  updateChart ( srv ) {
 
         let selected = servant.weaponNames[ selectKey.selectedIndex ];
 
-        drawChart( ent.head.minc + 42, servant.getTmLine( selected  ) );
+        const t = document.createTextNode( selected );
+        titleKey.removeChild( titleKey.firstChild );
+        titleKey.appendChild( t );
+        drawChart( ent.head.minc + 42, servant.getTmLine( selected  ), selected );
 
 
 }
