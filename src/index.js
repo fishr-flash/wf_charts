@@ -11,7 +11,8 @@ const warrs = jsnhist();
 var servant;
 var selectKey;
 var titleKey;
-var chartOpts;
+var divChartOpts;
+var setOpts;
 
 /**
  * head: {…}
@@ -98,21 +99,8 @@ function init() {
 
     const datetimes = document.getElementsByName( 'datetimes' );
 
-    chartOpts = document.getElementById( 'chart_opts');
-    const lbl = document.createElement( 'label' );
-    const t = document.createTextNode( " cost" );
 
-
-    const chb = document.createElement( 'input' );
-    chb.type = 'checkbox';
-    chb.title = 'cost';
-    chb.alt = 'cost';
-    chb.text = 'cost'
-    chb.defaultValue = 'cost';
-    chb.setAttribute( 'defaultValue', 'cost' );
-    lbl.appendChild( chb )
-    chartOpts.appendChild( lbl )
-    lbl.appendChild( t );
+    //constructOpts( "count")
 
     connFunct = changePeriod;
     document.getElementsByName( 'hiddenSt').onchange = changePeriod;
@@ -132,7 +120,7 @@ function drawChart( minv = 42, timeline, nameTitle ) {
 
     let options = {
         title: nameTitle,
-        hAxis: {title: "", titleTextStyle: {color: '#333'}},
+        hAxis: {title: "time", titleTextStyle: {color: '#333'}},
         vAxis: {minValue: minv }
     };
 
@@ -171,9 +159,14 @@ var changeKey = ( e ) =>{
 
 function  updateChart ( srv ) {
 
-    selectKey = document.getElementById( "wepon_keys" );
+
     servant = srv;
+    selectKey = document.getElementById( "wepon_keys" );
     titleKey = document.getElementById( "selected_title" );
+
+    setOpts = servant.optNams[ 0 ];
+
+    constructOpts( servant.optNams )
 
 
 
@@ -208,3 +201,43 @@ function  updateChart ( srv ) {
 
 
 }
+
+const constructOpts = ( arrNms )=>
+{
+    divChartOpts = document.getElementById( 'chart_opts');
+
+
+    arrNms.forEach( ( label, index, array ) =>{
+
+
+        const pp = document.createElement( "p" );
+
+        const lbl = document.createElement( 'label' );
+        const t = document.createTextNode( label );
+
+
+        const chb = document.createElement( 'input' );
+        chb.type = 'checkbox';
+        chb.title = label;
+        if( index == 0 ) chb.checked = true;
+        chb.onclick = changeOpts;
+        lbl.appendChild( chb )
+        lbl.appendChild( t );
+        pp.appendChild( lbl );
+        divChartOpts.appendChild( pp )
+    } )
+
+}
+
+
+const changeOpts = ( e )=>{
+    /////////////////CONSOLE//////////////////
+    ///TODO: Remove it console    
+        console.log( '233.', 'index.js, ', '**************************************************** '  );
+        console.log( ' e : ',  e);
+        console.log( '  : ',  e.target.title);
+        console.log( '  : ', e.target.checked );
+        console.log( '  : ',  );
+    //////////////END CONSOLE ////////////////
+}
+

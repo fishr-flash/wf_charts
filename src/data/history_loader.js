@@ -35,19 +35,14 @@ export default  function ( callback ){
 
     }
 
-     var getTmLine =  ( name, dateOn = 0, dateOff = 0 ) => {
+     var getTmLine =  ( name, dateOn = 0, dateOff = 0, nams = [ 'c'] ) => {
         
+
 
         if( !name )
             name = _keyName;
         else
             _keyName = name;
-
-
-
-
-
-
 
         const ent = _allweapons.filter(
             ( current, index, arr ) => {
@@ -115,8 +110,6 @@ export default  function ( callback ){
              dateOff = _dateOff;
          }
 
-
-
          let ttl = ent.tl.filter( ( current ) => {
 
              const md = new Date(
@@ -128,48 +121,28 @@ export default  function ( callback ){
                  ,Number.parseFloat( current.t.sec )
              );
 
-
-
-
-
              if(
                  dateOn.valueOf() <= Date.parse( md )
                 && dateOff.valueOf() >= Date.parse( md )
              )
              {
-
-
                  return current;
              }
 
          });
-
-
-
-
-
-
-
-
         let tl = ttl.map(
             ( current, index, arr ) => {
-
-                return [
-                    `${current.t.hrs}.${current.t.min}.${current.t.sec}`
-                    , current.c
-                    //, current.sess
-                    , current.lq
-                    //,100 + ( current.cnt / 100 )
-                ]
+                let res = [];
+                res.push(  `${current.t.hrs}.${current.t.min}.${current.t.sec}` )
+                const len = nams.length;
+                for( var i = 0; i < len; i++ )
+                        res.push( current[ nams[ i ]]);
+                return res;
 
             }
         )
-        tl.unshift( [ "time"
-            , "ccost"
-            //, "session cost"
-            , "liquidity"
-            //, "count"
-        ]);
+         nams.unshift( "time");
+        tl.unshift( nams );
 
         return tl;
     }
@@ -206,6 +179,14 @@ export default  function ( callback ){
 
 
         })
+
+        const nams = [];
+        for( var nm in servant.allweapons[ 0 ].tl[ 0 ])
+                                 if( nm != "t")nams.push( nm )
+
+
+
+        servant.optNams = nams
 
 
         callback( servant );
