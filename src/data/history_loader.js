@@ -11,7 +11,7 @@ export default  function ( callback ){
     var _dateOn;
     var _dateOff;
 
-    var _weaponNames = [];
+
     var _allweapons = [];
 
     function servant() {};
@@ -117,7 +117,7 @@ export default  function ( callback ){
 
 
 
-         const ttl = ent.tl.filter( ( current ) => {
+         let ttl = ent.tl.filter( ( current ) => {
 
              const md = new Date(
                  Number.parseFloat( current.t.yr )
@@ -148,8 +148,12 @@ export default  function ( callback ){
 
 
 
+
+
+
         let tl = ttl.map(
             ( current, index, arr ) => {
+
                 return [
                     `${current.t.hrs}.${current.t.min}.${current.t.sec}`
                     , current.c
@@ -177,7 +181,13 @@ export default  function ( callback ){
         servant.getTmLine = getTmLine;
         servant.allweapons  = _allweapons = data;;
 
-        servant.weaponNames = data.map( ( current, index, arr ) => {
+        servant.allweapons.sort( ( a, b ) =>{
+            if( a.tl[ a.tl.length - 1 ].lq > b.tl[ b.tl.length - 1 ].lq ) return -1;
+            else if( a.tl[ a.tl.length - 1 ].lq < b.tl[ b.tl.length - 1 ].lq ) return 1;
+            else return 0;
+        })
+
+        servant.weaponNames = servant.allweapons.map( ( current, index, arr ) => {
 
             /**
              * {head: {…}, tl: Array(248)}
@@ -191,10 +201,12 @@ export default  function ( callback ){
                  __proto__: Object
              */
 
+
            return current.head.key;
 
 
         })
+
 
         callback( servant );
 
