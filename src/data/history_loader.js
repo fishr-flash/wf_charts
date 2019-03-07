@@ -11,6 +11,8 @@ export default  function ( callback ){
     var _dateOn;
     var _dateOff;
 
+    var _selectedOpts = [ 'c' ];
+
 
     var _allweapons = [];
 
@@ -35,18 +37,16 @@ export default  function ( callback ){
 
     }
 
-     var getTmLine =  ( name, dateOn = 0, dateOff = 0, nams = [ 'c'] ) => {
-        
+     var getTmLine =  ( name, dateOn = 0, dateOff = 0, opts ) => {
 
 
-        if( !name )
-            name = _keyName;
-        else
-            _keyName = name;
+        if( opts && opts.length )_selectedOpts = opts;
+
+        if( name ) _keyName = name;
 
         const ent = _allweapons.filter(
             ( current, index, arr ) => {
-                if( current.head.key == name )
+                if( current.head.key == _keyName )
                     return current;
             }
         )[ 0 ]
@@ -130,19 +130,28 @@ export default  function ( callback ){
              }
 
          });
+
+
         let tl = ttl.map(
-            ( current, index, arr ) => {
+            ( current ) => {
                 let res = [];
-                res.push(  `${current.t.hrs}.${current.t.min}.${current.t.sec}` )
-                const len = nams.length;
+                res.push(  `${current.t.hrs}.${current.t.min}.${current.t.sec}` );
+                const len = _selectedOpts.length;
                 for( var i = 0; i < len; i++ )
-                        res.push( current[ nams[ i ]]);
+                {
+                    if( _selectedOpts[ i ] === 'cnt' )res.push(  configCnt( current[ _selectedOpts[ i ]] ) );
+                    else res.push( current[ _selectedOpts[ i ]]);
+                }
+
+
                 return res;
 
             }
         )
-         nams.unshift( "time");
-        tl.unshift( nams );
+            
+
+         
+        tl.unshift( ( ['time'].concat( _selectedOpts.slice() ) ) );
 
         return tl;
     }
@@ -173,8 +182,6 @@ export default  function ( callback ){
                  tl: (248) [{…}, ... ]
                  __proto__: Object
              */
-
-
            return current.head.key;
 
 
@@ -182,15 +189,36 @@ export default  function ( callback ){
 
         const nams = [];
         for( var nm in servant.allweapons[ 0 ].tl[ 0 ])
-                                 if( nm != "t")nams.push( nm )
+            if (!(nm === 't')) nams.push(nm);
 
 
+        nams.sort();
+        _selectedOpts = [ nams[ 0 ] ];
 
-        servant.optNams = nams
+        servant.optNams = nams;
 
 
         callback( servant );
 
+    }
+
+    const configCnt = ( cnt ) =>{
+
+        switch ( ( cnt + "" ).length )
+        {
+            case 5:
+                cnt = cnt / 1000;
+                break;
+            case 4:
+                cnt = cnt / 100;
+                break;
+
+            case 3:
+                cnt = cnt / 10;
+                break;
+        }
+
+        return cnt;
     }
 
 

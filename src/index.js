@@ -84,7 +84,7 @@ var  tl = ent.tl.map(
     }
 )
 tl.unshift( [ "time"
-                    , "ccost"
+                    , "cost"
                     //, "session cost"
                    // , "liquidity"
                    // , "count"
@@ -160,43 +160,37 @@ var changeKey = ( e ) =>{
 function  updateChart ( srv ) {
 
 
-    servant = srv;
-    selectKey = document.getElementById( "wepon_keys" );
-    titleKey = document.getElementById( "selected_title" );
-
-    setOpts = servant.optNams[ 0 ];
-
-    constructOpts( servant.optNams )
+    if( !servant )
+            servant = srv;
 
 
 
 
 
-    while (selectKey.firstChild) {
-        selectKey.removeChild(selectKey.firstChild);
+    /**
+     *   0: "c"
+         1: "cnt"
+         2: "lq"
+         3: "sess"
+         length: 4
+     */
+    if( !setOpts || !setOpts.length )
+    {
+        setOpts = [ servant.optNams[ 0 ] ];
+        constructOpts( servant.optNams );
     }
 
-        let sel = document.createElement("option");
-        servant.weaponNames.map((current, index, arr) => {
 
-            let sel = document.createElement("option");
-            sel.value = current;
-            sel.innerHTML = current;
-            selectKey.appendChild(sel)
+    const selected = prepareCmbBox();
 
 
-        })
-        sel.value = "weapon";
-        sel.innerHTML = "weapon";
-        selectKey.appendChild(sel)
-        //selectKey.wr
-        selectKey.onchange = changeKey;
 
-        let selected = servant.weaponNames[ selectKey.selectedIndex ];
 
-        const t = document.createTextNode( selected );
-        titleKey.removeChild( titleKey.firstChild );
-        titleKey.appendChild( t );
+
+
+
+
+
         drawChart( ent.head.minc + 42, servant.getTmLine( selected  ), selected );
 
 
@@ -229,15 +223,54 @@ const constructOpts = ( arrNms )=>
 
 }
 
+const prepareCmbBox = ()=>{
+    selectKey = document.getElementById( "wepon_keys" );
+    titleKey = document.getElementById( "selected_title" );
+
+    while (selectKey.firstChild) {
+        selectKey.removeChild(selectKey.firstChild);
+    }
+
+    let sel = document.createElement("option");
+    servant.weaponNames.map((current, index, arr) => {
+
+        let sel = document.createElement("option");
+        sel.value = current;
+        sel.innerHTML = current;
+        selectKey.appendChild(sel)
+
+
+    })
+    sel.value = "weapon";
+    sel.innerHTML = "weapon";
+    selectKey.appendChild(sel)
+    //selectKey.wr
+    selectKey.onchange = changeKey;
+
+    let selected = servant.weaponNames[ selectKey.selectedIndex ];
+
+    const t = document.createTextNode( selected );
+    titleKey.removeChild( titleKey.firstChild );
+    titleKey.appendChild( t );
+
+    return selected;
+}
+
 
 const changeOpts = ( e )=>{
-    /////////////////CONSOLE//////////////////
-    ///TODO: Remove it console    
-        console.log( '233.', 'index.js, ', '**************************************************** '  );
-        console.log( ' e : ',  e);
-        console.log( '  : ',  e.target.title);
-        console.log( '  : ', e.target.checked );
-        console.log( '  : ',  );
-    //////////////END CONSOLE ////////////////
+
+
+    if( e.target.checked )
+        setOpts.push( e.target.title );
+    else
+        setOpts.splice( setOpts.indexOf( e.target.title), 1 );
+
+    const tl = servant.getTmLine( servant.weaponNames[ selectKey.selectedIndex ], 0, 0, setOpts.slice()  )
+
+
+    drawChart(  42, tl );
+    //drawChart( ent.head.minc + 42, servant.getTmLine( selected  ), selected );
+
+
 }
 
