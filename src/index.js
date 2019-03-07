@@ -268,7 +268,7 @@ const changeOpts = ( e )=>{
     const tl = servant.getTmLine( servant.weaponNames[ selectKey.selectedIndex ], 0, 0, setOpts.slice()  )
 
 
-    drawChart(  42, tl );
+    drawChart(  42, tl, servant.weaponNames[ selectKey.selectedIndex ]);
     //drawChart( ent.head.minc + 42, servant.getTmLine( selected  ), selected );
 
 
