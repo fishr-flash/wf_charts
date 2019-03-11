@@ -183,15 +183,7 @@ function  updateChart ( srv ) {
 
     const selected = prepareCmbBox();
 
-
-
-
-
-
-
-
-
-        drawChart( ent.head.minc + 42, servant.getTmLine( selected  ), selected );
+    drawChart( ent.head.minc + 42, servant.getTmLine( selected  ), selected );
 
 
 }

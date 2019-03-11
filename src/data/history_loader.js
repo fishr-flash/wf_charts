@@ -26,12 +26,10 @@ export default  function ( callback ){
         const reader = new FileReader;
 
         reader.onload = ( e ) => {
-
-
-
             parseHData( JSON.parse( e.target.result ) )
         }
         reader.readAsText( fileList[ 0 ] );
+
 
 
 
@@ -50,6 +48,7 @@ export default  function ( callback ){
                     return current;
             }
         )[ 0 ]
+
 
 
          if( !dateOn && !_dateOn)
@@ -163,11 +162,13 @@ export default  function ( callback ){
         servant.getTmLine = getTmLine;
         servant.allweapons  = _allweapons = data;;
 
-        servant.allweapons.sort( ( a, b ) =>{
+
+        ///FIXME: Не уверен что сортировка здесь нужна, но она точно ломает массив временные метки десортируются
+        /*servant.allweapons.sort( ( a, b ) =>{
             if( a.tl[ a.tl.length - 1 ].lq > b.tl[ b.tl.length - 1 ].lq ) return -1;
             else if( a.tl[ a.tl.length - 1 ].lq < b.tl[ b.tl.length - 1 ].lq ) return 1;
             else return 0;
-        })
+        })*/
 
         servant.weaponNames = servant.allweapons.map( ( current, index, arr ) => {
 
